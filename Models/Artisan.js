@@ -22,13 +22,38 @@
 // );
 
 // module.exports = Artisan;
-const {con} = require("../Configuration/connectDb") 
-const sql = 
-"CREATE TABLE IF NOT EXISTS buyer (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), password VARCHAR(255), address VARCHAR(255), email VARCHAR(255)), phonenumber VARCHAR(255)";     
+// const {con} = require("../Configuration/connectDb") 
+// const sql = 
+// "CREATE TABLE IF NOT EXISTS buyer (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), password VARCHAR(255), address VARCHAR(255), email VARCHAR(255)), phonenumber VARCHAR(255)";     
  
-const artisan=  con.query(sql, function (err, result) { 
+// const artisan=  con.query(sql, function (err, result) { 
  
-         if (err) throw err; 
-         console.log("Table created"); 
-       }); 
- module.exports= artisan; 
+//          if (err) throw err; 
+//          console.log("Table created"); 
+//        }); 
+//  module.exports= artisan; 
+const { con } = require("../Configuration/connectDb");
+
+const createArtisanTable = () => {
+    const sql = `
+    CREATE TABLE IF NOT EXISTS artisan (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        bio TEXT,
+        password VARCHAR(255),
+        address VARCHAR(255),
+        email VARCHAR(255),
+        phonenumber VARCHAR(255),
+        image VARCHAR(255) 
+    )`;
+
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.error("Error creating artisan table: ", err);
+            return;
+        }
+        console.log("Artisan table created");
+    });
+};
+
+module.exports = createArtisanTable;
