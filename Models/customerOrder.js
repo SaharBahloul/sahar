@@ -43,7 +43,7 @@ const { con } = require("../Configuration/connectDb");
 
 const createOrderTable = () => {
     const sql = `
-    CREATE TABLE IF NOT EXISTS \`order\` (
+    CREATE TABLE IF NOT EXISTS customerorder (
         orderId INT AUTO_INCREMENT PRIMARY KEY,
         status VARCHAR(255) NOT NULL,
         orderDate DATE NOT NULL,
@@ -60,7 +60,7 @@ const createOrderTable = () => {
             console.error("Error creating the order table: ", err);
             return;
         }
-        console.log("Order table created");
+        console.log("customerorder table created");
     });
 };
 

@@ -8,9 +8,9 @@ const con =  mysql.createConnection({
     //port: 3306,
     password: process.env.PASSWORD, 
     database: process.env.DB 
-  
+
   }); 
- 
+
 const connectD = async () => { 
      
     try {  

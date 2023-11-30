@@ -6,16 +6,21 @@ const {connectD,con} = require("./Configuration/connectDb")
 const createBuyerTable = require("./Models/Buyer");
 const createArtisanTable = require("./Models/Artisan")
 const createCommentTable = require("./Models/Comment")
-const createOrderTable = require("./Models/Order")
+const createOrderTable = require("./Models/customerOrder")
 const createOrderProduct = require("./Models/Product")
-const  createProductTable = require("./Models/Order")
+const createProductTable = require("./Models/Product");
+
+var cors = require('cors') 
 const app = express(); 
 dotenv.config(); 
+
 
 const port = process.env.PORT; 
  
 
+app.use(cors()) 
 
+app.use(express.json());
 
 connectD().then(() => {
   // After a successful database connection, create the buyer table
@@ -37,6 +42,6 @@ connectD().then(() => {
   console.error('Failed to connect to the database:', err);
 });
 
-app.use(express.json());
+
 app.use("/api", buyerRoute); 
 
