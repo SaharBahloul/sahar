@@ -44,7 +44,8 @@ const createArtisanTable = () => {
         address VARCHAR(255),
         email VARCHAR(255),
         phonenumber VARCHAR(255),
-        image VARCHAR(255) 
+        image VARCHAR(255) ,
+        role ENUM('user', 'admin') DEFAULT 'admin'
     )`;
 
     con.query(sql, function (err, result) {

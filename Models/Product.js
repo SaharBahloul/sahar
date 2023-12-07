@@ -38,7 +38,10 @@ const createProductTable = () => {
         region VARCHAR(255),
         price DECIMAL(10, 2),
         description TEXT,
+        image  VARCHAR(255),
         artisanId INT,
+        qte INT,
+        rating int ,
         FOREIGN KEY (artisanId) REFERENCES artisan(id)
     )`;
 

@@ -11,8 +11,11 @@ const express = require("express");
   getOrder, // get buyer /order  /buyer/ordder
   getOneBuyerById, //  get buyer profile
   getProductsByCategory ,// search for products by category 
-  getProductsByRegion
- 
+  getProductsByRegion,
+  signIn,
+  deleteUser, 
+  putUser
+
  } = require("../Controllers/buyerController"); 
  
  buyerRoute.post("/register", register);
@@ -22,7 +25,9 @@ const express = require("express");
   buyerRoute.get("/buyer/:id", getOneBuyerById); 
 buyerRoute.get("/products/category",getProductsByCategory) ;
 buyerRoute.get("/products/region",getProductsByRegion) ;
+buyerRoute.post("/signIn", signIn); 
+buyerRoute.delete("/buyer/:id", deleteUser); 
+buyerRoute.put("/buyer/:id", putUser);
 
-  //userRoute.put("/user/:id", putUser); 
-  //userRoute.delete("/user/:id", deleteUser); 
+  
  module.exports = buyerRoute; 

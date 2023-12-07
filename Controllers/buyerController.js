@@ -1,5 +1,5 @@
 const { con } = require("../Configuration/connectDb");
-
+const jwt = require("jsonwebtoken"); 
 
 
 //register
@@ -137,8 +137,99 @@ const getProductsByRegion = async (request, response) => {
     }
   );
 };
+//signin
+const signIn = async (req, res) => {
+  const { email, password } = req.body;
+
+  // Query to find user by email
+  const query = "SELECT * FROM buyer WHERE email = ?";
+  
+  con.query(query, [email], function (err, result) {
+      if (err) {
+          console.error(err);
+          return res.status(500).json({ msg: "Server error" });
+      }
+
+      // Check if user is found
+      if (result.length > 0) {
+          const foundUser = result[0];
+
+          // Password check (Assuming plain text passwords for simplicity)
+          if (password === foundUser.password) {
+              // Create JWT token
+              const token = jwt.sign(
+                  { id: foundUser.id, role: foundUser.role },
+                  process.env.JWT_SECRET
+              );
+              res.status(200).json({ user: foundUser, token: token });
+          } else {
+              res.status(400).json({ msg: "Wrong password" });
+          }
+      } else {
+          res.status(400).json({ msg: "User not registered" });
+      }
+  });
+};
 
 
+//delete 
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+
+  con.query(
+    "DELETE FROM buyer WHERE id = ?",
+    [id],
+    function (err, result) {
+      if (err) {
+        console.error("Error on deleting user:", err);
+        return res.status(500).json({ msg: "Error on deleting user", error: err.message });
+      }
+      // Check if any row was actually deleted
+      if (result.affectedRows > 0) {
+        res.status(200).json({ msg: "User deleted successfully" });
+      } else {
+        res.status(404).json({ msg: "User not found" });
+      }
+    }
+  );
+};
+
+const putUser = async (req, res) => {
+  const id = req.params.id;
+  const updatedData = req.body;
+
+  // Constructing the SQL query
+  let query = "UPDATE buyer SET ";
+  let queryParams = [];
+
+  // Dynamically create the query and parameters based on the provided data
+  Object.keys(updatedData).forEach((key, index, array) => {
+    query += `${key} = ?`;
+    queryParams.push(updatedData[key]);
+    if (index < array.length - 1) query += ", ";
+  });
+
+  query += " WHERE id = ?";
+  queryParams.push(id);
+
+  // Execute the query
+  con.query(query, queryParams, function (err, result) {
+    if (err) {
+      console.error("Error on updating user:", err);
+      return res.status(500).json({ msg: "Error on updating user", error: err.message });
+    }
+    // Check if any row was actually updated
+    if (result.affectedRows > 0) {
+      res.status(200).json({ msg: "User updated successfully" });
+    } else {
+      res.status(404).json({ msg: "User not found" });
+    }
+  });
+};
+
+
+
+//put
 // artisan
 module.exports = {
   register,
@@ -147,5 +238,7 @@ module.exports = {
  getOrder,
  getOneBuyerById,
 getProductsByCategory,
-getProductsByRegion
+getProductsByRegion,
+signIn, deleteUser ,
+putUser
 };
